@@ -2,19 +2,28 @@ package client;
 
 public class rsaClient
 {
-	private static boolean[] isPrime;
-	
 	public static void main(String[] args)
 	{
-		generatePrimes( 10000 );
+//		int p = 61, q = 53, n = p * q, e = 17, t = (p - 1) * (q - 1), d = 2753;
+//		
+//		System.out.println( "Random coprime = " + PrimeGenerator.getCoprime( t ) );
+//		System.out.println("expected d = " + d);
+//		d = modInverse( e, t );
+//		System.out.println("actual d = " + d);
+//		System.out.println("test 27^-1 (mod 392) = " + modInverse( 27, 392 ));
 		
-		int p = 61, q = 53, n = p * q, e = 17, t = (p - 1) * (q - 1), d = 2753;
+		KeyGenerator keyGen = new KeyGenerator();
+		keyGen.generateKeys();
 		
-		System.out.println("expected d = " + d);
-		d = modInverse( e, t );
-		System.out.println("actual d = " + d);
+		PublicKey pubKey = keyGen.getPublicKey();
+		PrivateKey privKey = keyGen.getPrivateKey();
 		
-		System.out.println("test 27^-1 (mod 392) = " + modInverse( 27, 392 ));
+		String msg = "Aleks says: Hello World!";
+		System.out.println("original msg = "+msg);
+		pubKey.encrypt( msg );
+		
+		System.out.println("encrypted message = "+pubKey.toString());
+		System.out.println(privKey.decrypt(pubKey.getEncryptedMsg()));
 	}
 	
 	// shouldn't use this version
@@ -60,24 +69,5 @@ public class rsaClient
 	    	x1 += m0;
 	    
 	    return x1;
-	}
-	
-	private static void generatePrimes( int n )
-	{
-		isPrime = new boolean[n+1];
-        for (int i = 2; i <= n; i++)
-        	isPrime[i] = true;
-
-        // mark non-primes <= n using Sieve of Eratosthenes
-        for (int factor = 2; factor*factor <= n; factor++)
-        {
-            // if factor is prime, then mark multiples of factor as nonprime
-            // suffices to consider mutiples factor, factor+1, ...,  n/factor
-            if (isPrime[factor])
-            {
-                for (int j = factor; factor*j <= n; j++)
-                	isPrime[factor*j] = false;
-            }
-        }
 	}
 }

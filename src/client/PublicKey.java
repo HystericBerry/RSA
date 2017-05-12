@@ -47,5 +47,5 @@ public class PublicKey
 	
 	private BigInteger[] _C;
 	
-	public int _e, _n;
+	private int _e, _n;
 }
