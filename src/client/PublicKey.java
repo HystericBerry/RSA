@@ -2,20 +2,24 @@ package client;
 
 import java.math.BigInteger;
 
-public class PublicKey {
-	public PublicKey(int e, int n) {
+public class PublicKey
+{
+	public PublicKey(int e, int n)
+	{
 		_e = e;
 		_n = n;
 	}
 
-	public void encrypt(String M) {
+	public void encrypt(String M)
+	{
 		StringBuilder str = new StringBuilder();
 
 		this._C = new BigInteger[M.length()];
 		BigInteger bigE = new BigInteger(Integer.toString(this._e));
 		BigInteger bigN = new BigInteger(Integer.toString(this._n));
 
-		for (int i = 0; i < M.length(); ++i) {
+		for (int i = 0; i < M.length(); ++i)
+		{
 			BigInteger bigM = new BigInteger(Integer.toString(M.charAt(i)));
 
 			this._C[i] = bigM.modPow(bigE, bigN);
@@ -25,8 +29,14 @@ public class PublicKey {
 		encryptedMsg = str.toString();
 	}
 
-	public BigInteger[] getEncryptedMsg() {
+	public BigInteger[] getEncryptedMsg()
+	{
 		return this._C;
+	}
+	
+	public String getFactors()
+	{
+		return "[e = "+this._e+", n = "+this._n+"]";
 	}
 
 	@Override

@@ -8,16 +8,17 @@ import java.util.TreeSet;
 /**
  * Utility responsible for generating random primes.
  */
-public final class PrimeGenerator {
+public final class PrimeGenerator
+{
 	private static Random _rand = new Random(System.currentTimeMillis());
 	private static Set<Integer> _primeCache = initPrimeCache();
 	private static final int SIEVE_SIZE = 100000;
 
 	// prevent primegenerator from being initialized
-	private PrimeGenerator() {
-	};
+	private PrimeGenerator() { };
 
-	private static Set<Integer> initPrimeCache() {
+	private static Set<Integer> initPrimeCache()
+	{
 		Set<Integer> cache = new TreeSet<Integer>();
 		boolean[] isPrime = generatePrimes(SIEVE_SIZE);
 
@@ -29,7 +30,8 @@ public final class PrimeGenerator {
 		return cache;
 	}
 
-	public static boolean isPrime(int p) {
+	public static boolean isPrime(int p)
+	{
 		if (p <= SIEVE_SIZE)
 			return _primeCache.contains(p);
 
@@ -44,14 +46,19 @@ public final class PrimeGenerator {
 		return true;
 	}
 
-	public static int getPrime() {
+	public static int getPrime()
+	{
 		int limit = _primeCache.size();
 		// Don't pick primes that are too large... values can overflow
 		return getPrime(limit);
 	}
 
-	public static int getPrime(int limit) {
-		int iterations = _rand.nextInt(limit);
+	public static int getPrime(int limit)
+	{
+		if( limit+1 > _primeCache.size() )
+			limit = _primeCache.size()-1;
+		
+		int iterations = _rand.nextInt(limit)+1;
 		Iterator<Integer> iter = _primeCache.iterator();
 		Integer prime = null;
 		for (int i = 0; i < iterations; ++i)
@@ -60,7 +67,8 @@ public final class PrimeGenerator {
 	}
 
 	//Iterates through the list of primes to get a coprime
-	public static int getCoprime(int prime) {
+	public static int getCoprime(int prime)
+	{
 		int randInt = 0, limit = 1000, gcd;
 		do {
 			gcd = PrimeGenerator.gcd(randInt = (prime + _rand.nextInt(limit)), prime);
@@ -70,15 +78,18 @@ public final class PrimeGenerator {
 	}
 
 	// Calculates greatest common denominator of two integers
-	private static int gcd(int p, int q) {
+	private static int gcd(int p, int q)
+	{
 		if (q == 0)
 			return p;
 		else
 			return gcd(q, p % q);
 	}
 
-	// Creates an array of booleans representing if a number is prime. Boolean[i] is true if number i is prime.
-	private static boolean[] generatePrimes(int n) {
+	// Creates an array of booleans representing if a number 
+	// is prime. Boolean[i] is true if number i is prime.
+	private static boolean[] generatePrimes(int n)
+	{
 		boolean[] primes = new boolean[n + 1];
 		for (int i = 2; i <= n; ++i)
 			primes[i] = true;
